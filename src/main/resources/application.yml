@@ -1,0 +1,5 @@
+micronaut:
+    server:
+        port: 9999
+    application:
+        name: revolut-transfer

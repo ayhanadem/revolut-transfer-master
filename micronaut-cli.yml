@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: revolut.transfer
+---
+testFramework: junit
+sourceLanguage: java
