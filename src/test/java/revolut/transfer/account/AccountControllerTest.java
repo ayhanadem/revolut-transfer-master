@@ -161,7 +161,34 @@ public class AccountControllerTest
 
 
     @Test(expected = RuntimeException.class)
-    public void transferMoreThanBalance()
+public void transferMoreThanBalance()
+{
+
+
+    AccountRepository accountRepository = embeddedServer.getApplicationContext().getBean(AccountRepository.class);
+
+    Account account = Account.create(Money.of(200), UUID.randomUUID());
+    accountRepository.save(account);
+
+    Account accountTo = Account.create(Money.of(200), UUID.randomUUID());
+    accountRepository.save(accountTo);
+
+
+    AccountControllerTestClient client = embeddedServer.getApplicationContext().getBean(AccountControllerTestClient.class);
+
+
+    AccountController.TransferMoneyCommand command = new AccountController.TransferMoneyCommand();
+    command.setValue(300);
+    command.setTo(accountTo.id().toString());
+
+
+    client.transfer(account.id(), command);
+
+
+}
+
+    @Test(expected = RuntimeException.class)
+    public void transferWithNAAccount()
     {
 
 
@@ -170,16 +197,15 @@ public class AccountControllerTest
         Account account = Account.create(Money.of(200), UUID.randomUUID());
         accountRepository.save(account);
 
-        Account accountTo = Account.create(Money.of(200), UUID.randomUUID());
-        accountRepository.save(accountTo);
+
 
 
         AccountControllerTestClient client = embeddedServer.getApplicationContext().getBean(AccountControllerTestClient.class);
 
 
         AccountController.TransferMoneyCommand command = new AccountController.TransferMoneyCommand();
-        command.setValue(300);
-        command.setTo(accountTo.id().toString());
+        command.setValue(100);
+        command.setTo(UUID.randomUUID().toString());
 
 
         client.transfer(account.id(), command);

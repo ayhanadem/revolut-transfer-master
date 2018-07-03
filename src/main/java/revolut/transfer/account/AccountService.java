@@ -22,7 +22,6 @@ public class AccountService implements Observer {
         this.domainEvents = domainEvents;
         this.accountRepository = accountRepository;
         domainEvents.addObserver(this);
-        System.err.println("ASDMK DMSAK DAMKLMD LASDM ALKSDAMSDKLAS");
     }
 
     @Override

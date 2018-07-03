@@ -54,6 +54,10 @@ public class AccountController {
         Account account= accountRepository.findById(id);
         Account accountTo = accountRepository.findById(to);
 
+        if(account == null || accountTo == null)
+        {
+            throw new RuntimeException("Cannot find account with given id");
+        }
         account.withdraw(new Withdraw(Money.of(transferCommand.getValue())));
         accountTo.deposit(new Deposit(Money.of(transferCommand.getValue()),Optional.of(id)));
         accountRepository.save(account);
@@ -65,6 +69,10 @@ public class AccountController {
     public AccountView deposit(@Parameter("id") UUID id, @Body DepositMoneyCommand depositCommand) {
         Deposit deposit = new Deposit(Money.of(depositCommand.getValue()));
         Account account = accountRepository.findById(id);
+        if(account == null)
+        {
+            throw new RuntimeException("Cannot find account with given id");
+        }
         account.deposit(deposit);
         accountRepository.save(account);
         return accountViewAssembler.convert(account);
@@ -74,6 +82,10 @@ public class AccountController {
     public AccountView withdraw(@Parameter("id") UUID id, @Body WithdrawMoneyCommand withdrawCommand) {
         Withdraw withdraw = new Withdraw(Money.of(withdrawCommand.getValue()));
         Account account = accountRepository.findById(id);
+        if(account == null)
+        {
+            throw new RuntimeException("Cannot find account with given id");
+        }
         account.withdraw(withdraw);
         accountRepository.save(account);
         return accountViewAssembler.convert(account);
